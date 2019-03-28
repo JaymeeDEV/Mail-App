@@ -10,29 +10,29 @@
     </div>
 
     <ul class="inbox-nav">
-      <li class="active">
-        <a href="#">
+      <li :class="{ active: activeView == 'app-inbox'}">
+        <a href="#" @click.prevent="navigate('app-inbox', 'Inbox')">
           <i class="fa fa-inbox"></i>Inbox
           <span class="label label-danger pull-right">?</span>
         </a>
       </li>
 
-      <li>
-        <a href="#">
+      <li :class="{ active: activeView == 'app-sent'}">
+        <a href="#" @click.prevent="navigate('app-sent', 'Sent')">
           <i class="fa fa-envelope-o"></i>Sent
           <span class="label label-default pull-right">?</span>
         </a>
       </li>
 
-      <li>
-        <a href="#">
+      <li :class="{ active: activeView == 'app-important'}">
+        <a href="#" @click.prevent="navigate('app-important', 'Important')">
           <i class="fa fa-bookmark-o"></i>Important
           <span class="label label-warning pull-right">?</span>
         </a>
       </li>
 
-      <li>
-        <a href="#">
+      <li :class="{ active: activeView == 'app-trash'}">
+        <a href="#" @click.prevent="navigate('app-trash', 'Trash')">
           <i class="fa fa-trash-o"></i>Trash
           <span class="label label-default pull-right">?</span>
         </a>
@@ -42,5 +42,26 @@
 </template>
 
 <script>
-export default {};
+import { EVENTBUS } from "./main";
+
+export default {
+  created() {
+    EVENTBUS.$on("changeView", data => {
+      this.activeView = data.tag;
+    });
+  },
+  data() {
+    return {
+      activeView: "app-inbox"
+    };
+  },
+  methods: {
+    navigate(newView, title) {
+      EVENTBUS.$emit("changeView", {
+        tag: newView,
+        title: title
+      });
+    }
+  }
+};
 </script>
