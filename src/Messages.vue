@@ -3,6 +3,7 @@
     <tbody>
       <tr
         v-for="message in messages"
+        @click="openMessage(message)"
         v-bind:key="{ unread: typeof message.isRead !== 'undefined' && !message.isRead }"
       >
         <td>
@@ -31,11 +32,23 @@
 </template>
 
 <script>
+import { EVENTBUS } from "./main";
 export default {
   props: {
     messages: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    openMessage(message) {
+      EVENTBUS.$emit("changeView", {
+        tag: "app-view-message",
+        title: message.subject,
+        data: {
+          message: message
+        }
+      });
     }
   }
 };
