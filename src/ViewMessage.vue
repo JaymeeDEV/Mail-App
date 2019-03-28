@@ -1,5 +1,11 @@
 <template>
   <div class="inbox-body">
+    <div class="mail-option">
+      <button class="btn btn-primary" @click="navigateBack">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp; Back
+      </button>
+    </div>
+
     <p>
       <strong>Date:</strong>
       {{ data.message.date.fromNow() }}
@@ -16,7 +22,7 @@
       <h4>Attachments</h4>
 
       <ul>
-        <li v-for:="attachment in data.message.attachments">
+        <li :v-for="attachment in data.message.attachments">
           <i class="fa fa-paperclip"></i>
           {{ attachment.fileName }} ({{ attachment.size | formatBytes }})
         </li>
@@ -26,11 +32,27 @@
 </template>
 
 <script>
+import { EVENTBUS } from "./main";
 export default {
   props: {
     data: {
       type: Object,
       required: true
+    }
+  },
+  activated() {
+    if (typeof this.data.message.isRead !== "undefined") {
+      this.data.message.isRead = true;
+    }
+  },
+  methods: {
+    navigateBack() {
+      let previousView = this.$parent.previousView;
+      EVENTBUS.$emit("changeView", {
+        tag: previousView.tag,
+        title: previousView.title,
+        data: previousView.data
+      });
     }
   },
   filters: {
