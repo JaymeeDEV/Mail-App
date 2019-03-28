@@ -12,6 +12,23 @@
         <i class="fa fa-trash-o"></i>
         &nbsp; {{ data.message.isDeleted ? 'Deleted' : 'Delete' }}
       </button>
+      <template v-if="typeof data.message.isRead !== 'undefined'">
+        <button
+          class="btn btn-primary"
+          @click="data.message.isRead = false"
+          :disabled="!data.message.isRead"
+        >
+          <i class="fa fa-envelope-open" aria-hidden="true"></i>&nbsp; Mark as unread
+        </button>
+
+        <button
+          class="btn btn-primary"
+          @click="data.message.isRead = true"
+          :disabled="data.message.isRead"
+        >
+          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp; Mark as read
+        </button>
+      </template>
     </div>
 
     <p>
